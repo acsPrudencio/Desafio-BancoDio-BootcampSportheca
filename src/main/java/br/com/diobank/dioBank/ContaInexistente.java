@@ -11,4 +11,8 @@ public class ContaInexistente extends Exception{
 				+ n
 				+ " nao existe");
 	}
+	
+	public ContaInexistente() {
+		super("A conta nao pode ser null");
+	}
 }

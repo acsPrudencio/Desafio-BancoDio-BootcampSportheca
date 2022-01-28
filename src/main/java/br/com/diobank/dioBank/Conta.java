@@ -3,7 +3,7 @@ package br.com.diobank.dioBank;
 import lombok.Getter;
 
 @Getter
-public abstract class Conta implements IConta{
+public abstract class Conta implements IConta {
 
 	private static final int AGENCIA_PADRAO = 1;
 	private static int SEQUENCIAL = 1;
@@ -20,7 +20,7 @@ public abstract class Conta implements IConta{
 		this.cliente = cliente;
 	}
 
-	public void sacar(double valor) throws SaldoInsuficiente{
+	public void sacar(double valor) throws SaldoInsuficiente {
 		try {
 			if (valor > getSaldo()) {
 				throw new SaldoInsuficiente(numero, getSaldo());
@@ -51,6 +51,11 @@ public abstract class Conta implements IConta{
 		System.out.println(String.format("Agencia: %d", this.agencia));
 		System.out.println(String.format("Numero: %d", this.numero));
 		System.out.println("Movimentacao:");
-		System.out.println(extrato);
+
+		if (extrato.isEmpty()) {
+			System.out.println("Saldo: R$ " + this.getSaldo());
+		} else {
+			System.out.println(extrato);
+		}
 	}
 }

@@ -13,65 +13,68 @@ public class Banco {
 	private String nome;
 	private List<Conta> contas = new ArrayList<Conta>();
 
-	public void incluir(Conta c) {
-		contas.add(c);
+	public void incluir(Conta conta) throws ContaInexistente{
+		if (conta == null) {
+			throw new ContaInexistente();
+		} else {
+			contas.add(conta);
+		}
 	}
-	
-	public double saldo(int conta) throws ContaInexistente {
+
+	public double saldo(Conta conta) throws ContaInexistente {
 		Conta c = null;
 		c = pesquisarConta(conta);
 		return c.getSaldo();
 	}
 
-	public void debito(int conta, double value) throws ContaInexistente, SaldoInsuficiente {
+	public void saque(Conta conta, double value) throws ContaInexistente, SaldoInsuficiente {
 		Conta c = null;
 		c = pesquisarConta(conta);
 		c.sacar(value);
 
 	}
 
-	public void credito(int n, double value) throws ContaInexistente {
-		
+	public void deposito(Conta conta, double value) throws ContaInexistente {
+
 		Conta c = null;
-		c = pesquisarConta(n);
+		c = pesquisarConta(conta);
 		c.depositar(value);
 
-
 	}
 
-	public Conta pesquisarConta(int num) throws ContaInexistente {
-		for (Conta conta : contas) {
-			if (conta.getNumero() == num) {
-				return conta;
+	public Conta pesquisarConta(Conta conta) throws ContaInexistente {
+		for (Conta c : contas) {
+			if (c.getNumero() == conta.getNumero()) {
+				return c;
 			}
 		}
-		throw new ContaInexistente(num);
+		throw new ContaInexistente(conta.getNumero());
 	}
 
-	public void rendeJuros(int n, double t) throws ContaInexistente, NaoEhPoupanca {
+	public void rendeJuros(Conta conta, double t) throws ContaInexistente, NaoEhPoupanca {
 		Conta c = null;
-		c = pesquisarConta(n);
-		
+		c = pesquisarConta(conta);
+
 		try {
 			((ContaPoupanca) c).renderJuros(t);
 		} catch (Exception e) {
-			throw new NaoEhPoupanca(n);
+			throw new NaoEhPoupanca(conta.getNumero());
 		}
 	}
 
-	public void extrato(int n) throws ContaInexistente {
+	public void extrato(Conta n) throws ContaInexistente {
 		Conta c = pesquisarConta(n);
 		c.imprimirInfosComuns();
 	}
-	
 
-	public void transferir(int contaOrigem, int contaDestino, double valor) throws ContaInexistente, SaldoInsuficiente {
-			Conta c1, c2 = null;
-			
-			c1 = pesquisarConta(contaOrigem);
-			c1.sacar(valor);
-			c2 = pesquisarConta(contaDestino);
-			c2.depositar(valor);
-		
+	public void transferir(Conta contaOrigem, Conta contaDestino, double valor)
+			throws ContaInexistente, SaldoInsuficiente {
+		Conta c1, c2 = null;
+
+		c1 = pesquisarConta(contaOrigem);
+		c1.sacar(valor);
+		c2 = pesquisarConta(contaDestino);
+		c2.depositar(valor);
+
 	}
 }
